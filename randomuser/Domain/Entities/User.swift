@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct User: Identifiable, Equatable, Hashable {
-    let id: String
+public struct User: Identifiable, Equatable, Hashable {
+    public let id: String
     let firstName: String
     let lastName: String
     let email: String
