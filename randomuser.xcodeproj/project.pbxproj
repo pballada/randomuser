@@ -26,6 +26,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Tests/Data/RandomUserAPIDataSourceTests.swift,
+				Tests/Data/UserDefaultsDataSourceTests.swift,
 				Tests/Domain/DeleteUseCaseTests.swift,
 				Tests/Domain/FetchRandomUsersUseCaseTests.swift,
 				Tests/Domain/GetUserDetailsUseCaseTests.swift,
@@ -37,6 +38,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Tests/Data/RandomUserAPIDataSourceTests.swift,
+				Tests/Data/UserDefaultsDataSourceTests.swift,
 				Tests/Domain/DeleteUseCaseTests.swift,
 				Tests/Domain/FetchRandomUsersUseCaseTests.swift,
 				Tests/Domain/GetUserDetailsUseCaseTests.swift,
