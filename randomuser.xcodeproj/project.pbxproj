@@ -29,9 +29,36 @@
 		5F9F7DE92D41517100DC0935 /* randomuserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = randomuserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5F9F7E1F2D4169BF00DC0935 /* Exceptions for "randomuser" folder in "randomuser" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Tests/DeleteUseCaseTests.swift,
+				Tests/FetchRandomUsersUseCaseTests.swift,
+				Tests/GetUserDetailsUseCaseTests.swift,
+				Tests/SearchUsersUseCaseTests.swift,
+			);
+			target = 5F9F7DCE2D41516F00DC0935 /* randomuser */;
+		};
+		5F9F7E202D4169BF00DC0935 /* Exceptions for "randomuser" folder in "randomuserTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Tests/DeleteUseCaseTests.swift,
+				Tests/FetchRandomUsersUseCaseTests.swift,
+				Tests/GetUserDetailsUseCaseTests.swift,
+				Tests/SearchUsersUseCaseTests.swift,
+			);
+			target = 5F9F7DDE2D41517100DC0935 /* randomuserTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5F9F7DD12D41516F00DC0935 /* randomuser */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5F9F7E1F2D4169BF00DC0935 /* Exceptions for "randomuser" folder in "randomuser" target */,
+				5F9F7E202D4169BF00DC0935 /* Exceptions for "randomuser" folder in "randomuserTests" target */,
+			);
 			path = randomuser;
 			sourceTree = "<group>";
 		};

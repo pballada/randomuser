@@ -1,5 +1,5 @@
 //
-//  FetchRandomUsersTestCase.swift
+//  FetchRandomUsersUseCaseTests.swift
 //  randomuser
 //
 //  Created by Pau on 22/1/25.
@@ -7,6 +7,34 @@
 
 import XCTest
 @testable import randomuser
+
+final class MockUserRepository: UserRepository {
+    
+    var fetchRandomUsersCalled = false
+    var fetchRandomUsersResult: [User] = []
+    
+    var getAllUsersResult: [User] = []
+    
+    // Conforming to UserRepository
+    func fetchRandomUsers(count: Int) async throws -> [User] {
+        fetchRandomUsersCalled = true
+        return fetchRandomUsersResult
+    }
+    
+    func getAllUsers() -> [User] {
+        return getAllUsersResult
+    }
+    
+    func getUser(by id: String) -> User? {
+        return nil
+    }
+    
+    func deleteUser(id: String) {}
+    
+    func findUsers(matching query: String) -> [User] {
+        return []
+    }
+}
 
 final class FetchRandomUsersUseCaseTests: XCTestCase {
     
