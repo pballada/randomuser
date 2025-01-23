@@ -11,6 +11,8 @@ import SwiftUI
 struct randomuserApp: App {
     var body: some Scene {
         WindowGroup {
+            let networkClient = URLSessionNetworkClient()
+            let remoteDataSource = RandomUserAPIDataSource(networkClient: networkClient)
             ContentView()
         }
     }
