@@ -27,6 +27,7 @@
 			membershipExceptions = (
 				Tests/Data/RandomUserAPIDataSourceTests.swift,
 				Tests/Data/UserDefaultsDataSourceTests.swift,
+				Tests/Data/UserRepositoryImplementationTests.swift,
 				Tests/Domain/DeleteUseCaseTests.swift,
 				Tests/Domain/FetchRandomUsersUseCaseTests.swift,
 				Tests/Domain/GetUserDetailsUseCaseTests.swift,
@@ -39,6 +40,7 @@
 			membershipExceptions = (
 				Tests/Data/RandomUserAPIDataSourceTests.swift,
 				Tests/Data/UserDefaultsDataSourceTests.swift,
+				Tests/Data/UserRepositoryImplementationTests.swift,
 				Tests/Domain/DeleteUseCaseTests.swift,
 				Tests/Domain/FetchRandomUsersUseCaseTests.swift,
 				Tests/Domain/GetUserDetailsUseCaseTests.swift,
