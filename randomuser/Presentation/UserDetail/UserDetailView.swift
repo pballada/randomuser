@@ -47,7 +47,7 @@ struct UserDetailView_Previews: PreviewProvider {
                 lastName: "Doe",
                 email: "john.doe@example.com",
                 phone: "+1 (555) 123-4567",
-                pictureURL: "https://randomuser.me/api/portraits/med/men/75.jpg"
+                pictureURL: "https://randomuser.me/api/portraits/men/75.jpg"
             ))
         }
     }
