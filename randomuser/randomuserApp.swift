@@ -13,7 +13,22 @@ struct randomuserApp: App {
         WindowGroup {
             let networkClient = URLSessionNetworkClient()
             let remoteDataSource = RandomUserAPIDataSource(networkClient: networkClient)
-            ContentView()
+            let localDataSource = UserDefaultsDataSource()
+            let userRepository = UserRepositoryImplementation(
+                remoteDataSource: remoteDataSource,
+                localDataSource: localDataSource
+            )
+            
+            let fetchUseCase = DefaultFetchRandomUsersUseCase(userRepository: userRepository)
+            let removeUseCase = DefaultDeleteUserUseCase(userRepository: userRepository)
+            let searchUseCase = DefaultSearchUsersUseCase(userRepository: userRepository)
+            
+            let listViewModel = UserListViewModel(fetchUseCase: fetchUseCase,
+                                                  removeUseCase: removeUseCase,
+                                                  searchUseCase: searchUseCase)
+            
+            UserListView(viewModel: listViewModel)
+                .environmentObject(userRepository)
         }
     }
 }
