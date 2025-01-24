@@ -20,4 +20,7 @@ public protocol UserRepository {
     
     /// Return users whose name, surname, or email matches the given query.
     func findUsers(matching query: String) -> [User]
+    
+    /// Return all blacklisted users
+    func getBlacklistedUsers() -> [User]
 }

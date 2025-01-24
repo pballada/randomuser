@@ -10,8 +10,9 @@ import Foundation
 protocol LocalUserDataSource {
     func loadPersistedUsers() -> Set<User>
     func saveUsers(_ users: Set<User>)
-    func loadBlacklistedUserIds() -> Set<String>
-    func saveBlacklistedUserIds(_ userIds: Set<String>)
+    func loadBlacklistedUsers() -> Set<User>
+    func saveBlacklistedUsers(_ users: Set<User>)
+    func addBlacklistedUser(_ user: User)
 }
 
 // MARK: - Implementation using UserDefaults as a minimal example
@@ -35,18 +36,24 @@ final class UserDefaultsDataSource: LocalUserDataSource {
         }
     }
     
-    func loadBlacklistedUserIds() -> Set<String> {
+    func loadBlacklistedUsers() -> Set<User> {
         guard let data = UserDefaults.standard.data(forKey: blacklistedKey),
-              let loaded = try? JSONDecoder().decode(Set<String>.self, from: data)
+              let loaded = try? JSONDecoder().decode(Set<User>.self, from: data)
         else {
             return []
         }
         return loaded
     }
     
-    func saveBlacklistedUserIds(_ userIds: Set<String>) {
-        if let data = try? JSONEncoder().encode(userIds) {
+    func saveBlacklistedUsers(_ users: Set<User>) {
+        if let data = try? JSONEncoder().encode(users) {
             UserDefaults.standard.set(data, forKey: blacklistedKey)
         }
+    }
+    
+    func addBlacklistedUser(_ user: User) {
+        var blacklistedUsers = loadBlacklistedUsers()
+        blacklistedUsers.insert(user)
+        saveBlacklistedUsers(blacklistedUsers)
     }
 }

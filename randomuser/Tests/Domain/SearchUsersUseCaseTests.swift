@@ -9,7 +9,7 @@ import XCTest
 @testable import randomuser
 
 final class MockUserRepositoryForSearch: UserRepository {
-    
+
     var findUsersQuery: String?
     var findUsersResult: [User] = []
     
@@ -21,6 +21,10 @@ final class MockUserRepositoryForSearch: UserRepository {
     func findUsers(matching query: String) -> [User] {
         findUsersQuery = query
         return findUsersResult
+    }
+    
+    func getBlacklistedUsers() -> [randomuser.User] {
+        return []
     }
 }
 

@@ -64,28 +64,34 @@ class UserDefaultsDataSourceTests: XCTestCase {
     }
     
     func testLoadBlacklistedUserIds_WhenNoIdsStored_ReturnsEmptySet() {
-        let blacklistedIds = dataSource.loadBlacklistedUserIds()
-        XCTAssertTrue(blacklistedIds.isEmpty)
+        let blacklistedUsers = dataSource.loadBlacklistedUsers()
+        XCTAssertTrue(blacklistedUsers.isEmpty)
     }
     
-    func testSaveAndLoadBlacklistedUserIds_WithValidIds_SuccessfullySavesAndLoads() {
+    func testSaveAndLoadBlacklistedUsers_WithValidIds_SuccessfullySavesAndLoads() {
 
-        let testBlacklistedIds: Set<String> = ["user1", "user2", "user3"]
+        let testBlacklistedUsers: Set<User> = [
+            User(id: "id-1", firstName: "Alice", lastName: "Smith",  email: "alice@example.com", phone: "111", pictureURL: ""),
+            User(id: "id-2", firstName: "Bob",   lastName: "Brown",  email: "bob@example.com",   phone: "222", pictureURL: "")
+        ]
         
-        dataSource.saveBlacklistedUserIds(testBlacklistedIds)
-        let loadedBlacklistedIds = dataSource.loadBlacklistedUserIds()
+        dataSource.saveBlacklistedUsers(testBlacklistedUsers)
+        let loadedBlacklistedUsers = dataSource.loadBlacklistedUsers()
         
-        XCTAssertEqual(loadedBlacklistedIds, testBlacklistedIds)
+        XCTAssertEqual(loadedBlacklistedUsers, testBlacklistedUsers)
     }
     
-    func testSaveBlacklistedUserIds_WithEmptySet_ClearsStoredBlacklistedIds() {
+    func testSaveBlacklistedUsers_WithEmptySet_ClearsStoredBlacklistedIds() {
         
-        let initialBlacklistedIds: Set<String> = ["user1", "user2"]
-        dataSource.saveBlacklistedUserIds(initialBlacklistedIds)
+        let testBlacklistedUsers: Set<User> = [
+            User(id: "id-1", firstName: "Alice", lastName: "Smith",  email: "alice@example.com", phone: "111", pictureURL: ""),
+            User(id: "id-2", firstName: "Bob",   lastName: "Brown",  email: "bob@example.com",   phone: "222", pictureURL: "")
+        ]
+        dataSource.saveBlacklistedUsers(testBlacklistedUsers)
         
-        dataSource.saveBlacklistedUserIds([])
-        let loadedBlacklistedIds = dataSource.loadBlacklistedUserIds()
+        dataSource.saveBlacklistedUsers([])
+        let loadedBlacklistedUsers = dataSource.loadBlacklistedUsers()
         
-        XCTAssertTrue(loadedBlacklistedIds.isEmpty)
+        XCTAssertTrue(loadedBlacklistedUsers.isEmpty)
     }
 }

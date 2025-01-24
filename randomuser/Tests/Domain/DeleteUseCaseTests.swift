@@ -23,6 +23,10 @@ final class MockUserRepositoryForDelete: UserRepository {
     func findUsers(matching query: String) -> [User] {
         return []
     }
+    
+    func getBlacklistedUsers() -> [randomuser.User] {
+        return []
+    }
 }
 
 final class DeleteUserUseCaseTests: XCTestCase {

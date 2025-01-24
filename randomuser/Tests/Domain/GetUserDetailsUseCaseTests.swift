@@ -21,6 +21,8 @@ final class MockUserRepositoryForDetails: UserRepository {
     
     func deleteUser(id: String) {}
     func findUsers(matching query: String) -> [User] { [] }
+    
+    func getBlacklistedUsers() -> [randomuser.User] { [] }
 }
 
 final class GetUserDetailsUseCaseTests: XCTestCase {
