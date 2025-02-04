@@ -48,6 +48,13 @@ class UserListViewModel: ObservableObject {
         }
     }
     
+    func shouldLoadMore(currentUser: User) -> Bool {
+        guard let currentIndex = users.firstIndex(where: { $0.id == currentUser.id }) else {
+            return false
+        }
+        return currentIndex >= (users.count - 5)
+    }
+    
     func loadMoreUsers() async {
         guard !isLoading else { return }
         isLoading = true

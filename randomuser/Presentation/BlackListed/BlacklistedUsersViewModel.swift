@@ -9,15 +9,14 @@ import SwiftUI
 import Combine
 
 final class BlacklistedUsersViewModel: ObservableObject {
-    var repository: UserRepositoryImplementation?
+    private let repository: UserRepository
     @Published var blacklistedUsers: [User] = []
-
-    init(repository: UserRepositoryImplementation?) {
+    
+    init(repository: UserRepository) {
         self.repository = repository
     }
-
+    
     func load() {
-        guard let repository = repository else { return }
         blacklistedUsers = repository.getBlacklistedUsers()
     }
 }

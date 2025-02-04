@@ -8,14 +8,7 @@
 import SwiftUI
 
 struct BlacklistedUsersView: View {
-    @EnvironmentObject var userRepository: UserRepositoryImplementation
-    @StateObject private var viewModel: BlacklistedUsersViewModel
-
-    init() {
-        // We can't read @EnvironmentObject here,
-        // so we'll create a placeholder and replace it in .onAppear
-        _viewModel = StateObject(wrappedValue: BlacklistedUsersViewModel(repository: nil))
-    }
+    @ObservedObject var viewModel: BlacklistedUsersViewModel
 
     var body: some View {
         
@@ -24,9 +17,6 @@ struct BlacklistedUsersView: View {
                 UserRow(user: user)
             }
         }.onAppear {
-            // If the VM needs to store the repository
-            // set it now and call load
-            viewModel.repository = userRepository
             viewModel.load()
         }
     }

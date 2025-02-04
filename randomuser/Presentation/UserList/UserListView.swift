@@ -10,6 +10,7 @@ import SwiftUI
 struct UserListView: View {
     @StateObject private var viewModel: UserListViewModel
     @State private var showBlacklistedView = false
+    @EnvironmentObject var userRepository: UserRepositoryImplementation
     
     init(viewModel: UserListViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -30,7 +31,7 @@ struct UserListView: View {
                             UserRow(user: user)
                                 .onAppear {
                                     // Infinite scroll trigger
-                                    if user == viewModel.users.last {
+                                    if viewModel.shouldLoadMore(currentUser: user) {
                                         Task {
                                             await viewModel.loadMoreUsers()
                                         }
@@ -56,36 +57,10 @@ struct UserListView: View {
             }
         }
         .sheet(isPresented: $showBlacklistedView) {
-            //BlacklistedUsersView()
+            BlacklistedUsersView(viewModel: BlacklistedUsersViewModel(repository: userRepository))
         }
         .onAppear {
             viewModel.onAppear()
-        }
-    }
-}
-
-struct UserRow: View {
-    let user: User
-    
-    var body: some View {
-        HStack {
-            AsyncImage(url: URL(string: user.pictureURL)) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                ProgressView()
-            }
-            .frame(width: 50, height: 50)
-            .clipShape(Circle())
-            
-            VStack(alignment: .leading) {
-                Text("\(user.firstName) \(user.lastName)")
-                    .font(.headline)
-                Text(user.email)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
         }
     }
 }
