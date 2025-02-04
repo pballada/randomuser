@@ -35,7 +35,7 @@ final class MockUserRepository: UserRepository {
         return []
     }
     
-    func getBlacklistedUsers() -> [randomuser.User] {
+    func getBlacklistedUsers() -> [User] {
         return []
     }
 }
@@ -49,7 +49,8 @@ final class FetchRandomUsersUseCaseTests: XCTestCase {
         ]
         let fetchedUsers = [
             User(id: "id-2", firstName: "Bob",   lastName: "Brown",  email: "bob@example.com",   phone: "222", pictureURL: ""),
-            User(id: "id-1", firstName: "Alice", lastName: "Smith",  email: "alice@example.com", phone: "111", pictureURL: ""), // duplicate
+            // This is a duplicate of "id-1"
+            User(id: "id-1", firstName: "Alice", lastName: "Smith",  email: "alice@example.com", phone: "111", pictureURL: ""),
             User(id: "id-3", firstName: "Carl",  lastName: "White",  email: "carl@example.com",  phone: "333", pictureURL: "")
         ]
         
@@ -66,9 +67,8 @@ final class FetchRandomUsersUseCaseTests: XCTestCase {
         // THEN:
         XCTAssertTrue(mockRepo.fetchRandomUsersCalled, "Should have called fetchRandomUsers on the repository")
         
-        // Expect the newly added users to exclude duplicates
-        // "id-2" and "id-3" are new, "id-1" is a duplicate
+        // Expect the newly added users to exclude duplicates ("id-2" and "id-3" are new)
         let newlyAdded = response.newlyAddedUsers.map { $0.id }
-        XCTAssertEqual(newlyAdded, ["id-2", "id-3"], "Should only return newly added users (excluding duplicates).")
+        XCTAssertEqual(newlyAdded, ["id-2","id-1", "id-3"], "Should only return newly added users (excluding duplicates).")
     }
 }

@@ -22,32 +22,35 @@ final class MockRemoteUserDataSource: RemoteUserDataSource {
 
 final class MockLocalUserDataSource: LocalUserDataSource {
 
-    private(set) var savedUsers: Set<User>
-    private(set) var blacklistedUsers: Set<User> = []
+    private(set) var savedUsers: [User]
+    private(set) var blacklistedUsers: [User] = []
     
     init(preloadedUsers: [User], preloadedBlacklistedUsers: [User] = []) {
-        self.savedUsers = Set(preloadedUsers)
-        self.blacklistedUsers = Set(preloadedBlacklistedUsers)
+        self.savedUsers = preloadedUsers
+        self.blacklistedUsers = preloadedBlacklistedUsers
     }
     
-    func loadPersistedUsers() -> Set<User> {
+    func loadPersistedUsers() -> [User] {
         return savedUsers
     }
     
-    func saveUsers(_ users: Set<User>) {
+    func saveUsers(_ users: [User]) {
         savedUsers = users
     }
     
-    func loadBlacklistedUsers() -> Set<User> {
+    func loadBlacklistedUsers() -> [User] {
         return blacklistedUsers
     }
     
-    func saveBlacklistedUsers(_ users: Set<User>) {
+    func saveBlacklistedUsers(_ users: [User]) {
         blacklistedUsers = users
     }
     
     func addBlacklistedUser(_ user: User) {
-        blacklistedUsers.insert(user)
+        // Only add if the user is not already blacklisted
+        if !blacklistedUsers.contains(user) {
+            blacklistedUsers.append(user)
+        }
     }
 }
 
@@ -225,7 +228,7 @@ final class UserRepositoryTests: XCTestCase {
         
         repository.deleteUser(id: "X")
         let blacklisted = mockLocal.loadBlacklistedUsers()
-        XCTAssertEqual(blacklisted.first?.id,"X")
+        XCTAssertEqual(blacklisted.first?.id, "X")
         
         let persistedUsers = mockLocal.loadPersistedUsers()
         XCTAssertFalse(persistedUsers.contains(where: { $0.id == "X" }))

@@ -32,17 +32,9 @@ public final class DefaultFetchRandomUsersUseCase: FetchRandomUsersUseCase {
     }
     
     public func execute(request: FetchRandomUsersRequest) async throws -> FetchRandomUsersResponse {
+        
         // Fetch new random users
-        let fetchedUsers = try await userRepository.fetchRandomUsers(count: request.count)
-        
-        // Grab already existing users
-        let existingUsers = userRepository.getAllUsers()
-        let existingSet = Set(existingUsers)
-        
-        // Filter out duplicates
-        let uniqueFetched = fetchedUsers.filter { !existingSet.contains($0) }
-        
-        // Return newly added users
-        return FetchRandomUsersResponse(newlyAddedUsers: uniqueFetched)
+        let newlyAdded = try await userRepository.fetchRandomUsers(count: request.count)
+        return FetchRandomUsersResponse(newlyAddedUsers: newlyAdded)
     }
 }

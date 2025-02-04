@@ -7,53 +7,68 @@
 
 import Foundation
 
+//
+//  UserDefaultsDataSource.swift
+//  randomuser
+//
+//  Created by Pau on 23/1/25.
+//
+
+import Foundation
+
 protocol LocalUserDataSource {
-    func loadPersistedUsers() -> Set<User>
-    func saveUsers(_ users: Set<User>)
-    func loadBlacklistedUsers() -> Set<User>
-    func saveBlacklistedUsers(_ users: Set<User>)
+    func loadPersistedUsers() -> [User]
+    func saveUsers(_ users: [User])
+    func loadBlacklistedUsers() -> [User]
+    func saveBlacklistedUsers(_ users: [User])
     func addBlacklistedUser(_ user: User)
 }
-
-// MARK: - Implementation using UserDefaults as a minimal example
 
 final class UserDefaultsDataSource: LocalUserDataSource {
     private let usersKey = "persisted_users"
     private let blacklistedKey = "blacklisted_users"
     
-    func loadPersistedUsers() -> Set<User> {
+    // MARK: - Persisted Users
+    
+    func loadPersistedUsers() -> [User] {
         guard let data = UserDefaults.standard.data(forKey: usersKey),
-              let loaded = try? JSONDecoder().decode(Set<User>.self, from: data)
+              let loaded = try? JSONDecoder().decode([User].self, from: data)
         else {
             return []
         }
         return loaded
     }
     
-    func saveUsers(_ users: Set<User>) {
+    func saveUsers(_ users: [User]) {
         if let data = try? JSONEncoder().encode(users) {
             UserDefaults.standard.set(data, forKey: usersKey)
         }
     }
     
-    func loadBlacklistedUsers() -> Set<User> {
+    // MARK: - Blacklisted Users
+    
+    func loadBlacklistedUsers() -> [User] {
         guard let data = UserDefaults.standard.data(forKey: blacklistedKey),
-              let loaded = try? JSONDecoder().decode(Set<User>.self, from: data)
+              let loaded = try? JSONDecoder().decode([User].self, from: data)
         else {
             return []
         }
         return loaded
     }
     
-    func saveBlacklistedUsers(_ users: Set<User>) {
+    func saveBlacklistedUsers(_ users: [User]) {
         if let data = try? JSONEncoder().encode(users) {
             UserDefaults.standard.set(data, forKey: blacklistedKey)
         }
     }
     
     func addBlacklistedUser(_ user: User) {
-        var blacklistedUsers = loadBlacklistedUsers()
-        blacklistedUsers.insert(user)
-        saveBlacklistedUsers(blacklistedUsers)
+        var blacklisted = loadBlacklistedUsers()
+        
+        // Only add if not already in the list
+        if !blacklisted.contains(user) {
+            blacklisted.append(user)
+        }
+        saveBlacklistedUsers(blacklisted)
     }
 }

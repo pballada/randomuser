@@ -9,7 +9,8 @@ import Foundation
 
 public final class UserRepositoryImplementation: UserRepository, ObservableObject {
     
-    @Published private var storedUsers: Set<User> = []
+    @Published private var storedUsers: [User] = []
+    
     private let remoteDataSource: RemoteUserDataSource
     private let localDataSource: LocalUserDataSource
     
@@ -22,65 +23,73 @@ public final class UserRepositoryImplementation: UserRepository, ObservableObjec
         self.storedUsers = localDataSource.loadPersistedUsers()
     }
     
-    /// Fetch random users from remote API and merge them with stored users (avoiding duplicates).
-    /// Returns just the newly added users (not all).
+    // MARK: - Fetch
+    
     public func fetchRandomUsers(count: Int) async throws -> [User] {
         let remoteUsers = try await remoteDataSource.getRandomUsers(count: count)
         
-        // Filter out any users we already have
-        let newUsers = remoteUsers.filter { !storedUsers.contains($0) }
+        var newUsers: [User] = []
         
-        // Merge newly fetched users into in-memory store
-        storedUsers.formUnion(newUsers)
+        // Add only those users not yet in storedUsers by id
+        for user in remoteUsers {
+            if !storedUsers.contains(where: { $0.id == user.id }) {
+                storedUsers.append(user)
+                newUsers.append(user)
+            }
+        }
         
-        // Persist updated user set
+        // Persist updated user list
         localDataSource.saveUsers(storedUsers)
         
-        // Return only the newly added users
         return newUsers
     }
     
-    /// Returns all users currently stored in memory (and persisted).
+    // MARK: - Get
+    
     public func getAllUsers() -> [User] {
-        // Convert Set to Array and sort or transform if needed
-        Array(storedUsers)
+        storedUsers
     }
     
-    /// Returns a single user by matching ID, or `nil` if not found.
     public func getUser(by id: String) -> User? {
         storedUsers.first(where: { $0.id == id })
     }
     
-    /// Removes a user from stored set, then persists the change.
+    // MARK: - Delete
+    
     public func deleteUser(id: String) {
         guard let user = getUser(by: id) else { return }
+        
+        // Move user to blacklisted
         localDataSource.addBlacklistedUser(user)
-        storedUsers.remove(user)
+        
+        // Remove from memory
+        if let index = storedUsers.firstIndex(of: user) {
+            storedUsers.remove(at: index)
+        }
+        
+        // Update persistence
         localDataSource.saveUsers(storedUsers)
     }
     
-    /// Returns users whose firstName, lastName, or email matches the given query.
-    /// If query is empty, returns all users.
+    // MARK: - Search
+    
     public func findUsers(matching query: String) -> [User] {
-        let trimmedQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedQuery.isEmpty else {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            // Return all users if query is empty
             return getAllUsers()
         }
         
-        let lowercasedQuery = trimmedQuery.lowercased()
+        let lowercased = trimmed.lowercased()
         
-        // Filter in-memory set
-        let matched = storedUsers.filter { user in
-            user.firstName.lowercased().contains(lowercasedQuery) ||
-            user.lastName.lowercased().contains(lowercasedQuery) ||
-            user.email.lowercased().contains(lowercasedQuery)
+        return storedUsers.filter { user in
+            user.firstName.lowercased().contains(lowercased) ||
+            user.lastName.lowercased().contains(lowercased) ||
+            user.email.lowercased().contains(lowercased)
         }
-        
-        return Array(matched)
     }
     
     public func getBlacklistedUsers() -> [User] {
-        // Use local data source
-        return Array(localDataSource.loadBlacklistedUsers())
+        localDataSource.loadBlacklistedUsers()
     }
 }

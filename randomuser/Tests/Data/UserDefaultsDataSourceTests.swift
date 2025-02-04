@@ -1,5 +1,5 @@
 //
-//  UserDefaultsDatasourceTests.swift
+//  UserDefaultsDataSourceTests.swift
 //  randomuser
 //
 //  Created by Pau on 23/1/25.
@@ -32,14 +32,13 @@ class UserDefaultsDataSourceTests: XCTestCase {
         super.tearDown()
     }
     
-    func testLoadPersistedUsers_WhenNoUsersStored_ReturnsEmptySet() {
+    func testLoadPersistedUsers_WhenNoUsersStored_ReturnsEmptyArray() {
         let users = dataSource.loadPersistedUsers()
         XCTAssertTrue(users.isEmpty)
     }
     
     func testSaveAndLoadUsers_WithValidUsers_SuccessfullySavesAndLoads() {
-        
-        let testUsers: Set<User> = [
+        let testUsers: [User] = [
             User(id: "id-1", firstName: "Alice", lastName: "Smith",  email: "alice@example.com", phone: "111", pictureURL: ""),
             User(id: "id-2", firstName: "Bob",   lastName: "Brown",  email: "bob@example.com",   phone: "222", pictureURL: "")
         ]
@@ -50,27 +49,26 @@ class UserDefaultsDataSourceTests: XCTestCase {
         XCTAssertEqual(loadedUsers, testUsers)
     }
     
-    func testSaveUsers_WithEmptySet_ClearsStoredUsers() {
-        
-        let initialUsers: Set<User> = [
+    func testSaveUsers_WithEmptyArray_ClearsStoredUsers() {
+        let initialUsers: [User] = [
             User(id: "id-1", firstName: "Alice", lastName: "Smith",  email: "alice@example.com", phone: "111", pictureURL: "")
         ]
         dataSource.saveUsers(initialUsers)
         
+        // Save empty array to clear all users
         dataSource.saveUsers([])
         let loadedUsers = dataSource.loadPersistedUsers()
         
         XCTAssertTrue(loadedUsers.isEmpty)
     }
     
-    func testLoadBlacklistedUserIds_WhenNoIdsStored_ReturnsEmptySet() {
+    func testLoadBlacklistedUsers_WhenNoUsersStored_ReturnsEmptyArray() {
         let blacklistedUsers = dataSource.loadBlacklistedUsers()
         XCTAssertTrue(blacklistedUsers.isEmpty)
     }
     
-    func testSaveAndLoadBlacklistedUsers_WithValidIds_SuccessfullySavesAndLoads() {
-
-        let testBlacklistedUsers: Set<User> = [
+    func testSaveAndLoadBlacklistedUsers_WithValidUsers_SuccessfullySavesAndLoads() {
+        let testBlacklistedUsers: [User] = [
             User(id: "id-1", firstName: "Alice", lastName: "Smith",  email: "alice@example.com", phone: "111", pictureURL: ""),
             User(id: "id-2", firstName: "Bob",   lastName: "Brown",  email: "bob@example.com",   phone: "222", pictureURL: "")
         ]
@@ -81,14 +79,14 @@ class UserDefaultsDataSourceTests: XCTestCase {
         XCTAssertEqual(loadedBlacklistedUsers, testBlacklistedUsers)
     }
     
-    func testSaveBlacklistedUsers_WithEmptySet_ClearsStoredBlacklistedIds() {
-        
-        let testBlacklistedUsers: Set<User> = [
+    func testSaveBlacklistedUsers_WithEmptyArray_ClearsStoredBlacklistedUsers() {
+        let testBlacklistedUsers: [User] = [
             User(id: "id-1", firstName: "Alice", lastName: "Smith",  email: "alice@example.com", phone: "111", pictureURL: ""),
             User(id: "id-2", firstName: "Bob",   lastName: "Brown",  email: "bob@example.com",   phone: "222", pictureURL: "")
         ]
         dataSource.saveBlacklistedUsers(testBlacklistedUsers)
         
+        // Save empty array to clear blacklisted users
         dataSource.saveBlacklistedUsers([])
         let loadedBlacklistedUsers = dataSource.loadBlacklistedUsers()
         
